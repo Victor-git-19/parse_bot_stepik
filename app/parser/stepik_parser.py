@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 from time import sleep
 from typing import Dict, Literal, Optional
 
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -43,6 +45,24 @@ def _wait_for_values(driver: webdriver.Remote, attempts: int = 5) -> None:
         sleep(0.5)
 
 
+def _create_driver() -> webdriver.Remote:
+    """Создаёт Selenium driver для локальной или удалённой среды."""
+    selenium_url = os.getenv("SELENIUM_URL")
+    if selenium_url:
+        options = ChromeOptions()
+        options.add_argument("--headless=new")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        return webdriver.Remote(
+            command_executor=selenium_url,
+            options=options,
+        )
+
+    # локальная разработка (macOS Safari)
+    return webdriver.Safari()
+
+
 def fetch_stepik_progress(
     stepik_url: str,
     driver: Optional[webdriver.Remote] = None,
@@ -51,7 +71,7 @@ def fetch_stepik_progress(
     """Возвращает прогресс пользователя по ссылке профиля."""
     driver_provided = driver is not None
     if driver is None:
-        driver = webdriver.Safari()
+        driver = _create_driver()
 
     wait = WebDriverWait(driver, timeout)
 
