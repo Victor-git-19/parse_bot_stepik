@@ -17,9 +17,7 @@ services:
       retries: 5
   
   bot:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: victorgtr/telebot_app
     container_name: telebot_app
     depends_on:
       db:

@@ -1,2 +1,20 @@
+# Environment files
 .env
+venv/
+.venv/
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Tool caches
+.mypy_cache/
+.pytest_cache/
+.idea/
+.vscode/
+
+# Local databases
 telebot.db
+*.sqlite3
+*.db

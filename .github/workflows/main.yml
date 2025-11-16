@@ -1,0 +1,13 @@
+name: Main Workflow
+on:
+  push:
+    branches:
+      - main
+jobs:
+    checkout-and-print-tree:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository code
+              uses: actions/checkout@v3
+            - name: Print directory tree
+              run: tree .
