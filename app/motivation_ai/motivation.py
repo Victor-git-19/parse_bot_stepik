@@ -22,9 +22,9 @@ def build_motivation_prompt(progress: StepikProgress) -> str:
         f"""
         Ты — дружественный наставник. Вдохнови пользователя продолжать
         прогресс на Stepik, используй эмодзи, чтобы сообщение выглядело живым.
+        Отвечай с юмором и приколом, избегай официального тона.
+        Используй шутки и лёгкий стиль общения. Весели плользователя!
         Текущие данные:
-        - Текущая серия: {progress.current_streak} дней.
-        - Рекордная серия: {progress.max_streak} дней.
         - Решено задач: {progress.solved_tasks}.
 
         Дай короткое мотивационное сообщение (3-4 предложения),
@@ -43,7 +43,7 @@ def generate_motivation(progress: StepikProgress) -> str:
             {"role": "system", "content": "Ты доброжелательный мотиватор."},
             {"role": "user", "content": prompt},
         ],
-        max_tokens=200,
+        max_tokens=400,
         temperature=0.8,
     )
 

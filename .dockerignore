@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.db
+*.log
+
+venv/
+.venv/
+
+.git
+.gitignore
+.env
+
+telebot.db

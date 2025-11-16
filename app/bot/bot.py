@@ -99,24 +99,14 @@ async def progress_handler(message):
             session,
             tg_id=message.from_user.id,
             solved_tasks=progress.solved_tasks,
-            current_streak=progress.current_streak,
-            max_streak=progress.max_streak,
         )
 
-    motivation = generate_motivation(
-        StepikProgress(
-            current_streak=progress.current_streak,
-            max_streak=progress.max_streak,
-            solved_tasks=progress.solved_tasks,
-        )
-    )
+    motivation = generate_motivation(progress)
 
     await bot.send_message(
         message.chat.id,
         "Твой прогресс на Stepik:\n"
-        f"• Дней подряд: {progress.current_streak}\n"
-        f"• Рекорд: {progress.max_streak}\n"
-        f"• Задач решено: {progress.solved_tasks}\n\n"
+        f"• Решено шагов: {progress.solved_tasks}\n\n"
         f"{motivation}\n\n"
         "Если нужна помощь или идеи для прокачки, пиши моему другу "
         "@Prompt_ikBot — он поможет!",

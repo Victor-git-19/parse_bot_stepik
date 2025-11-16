@@ -47,8 +47,6 @@ async def update_user_progress(
     tg_id: int,
     *,
     solved_tasks: int,
-    current_streak: int,
-    max_streak: int,
 ) -> User | None:
     result = await session.execute(select(User).where(User.tg_id == tg_id))
     user = result.scalar_one_or_none()
@@ -57,8 +55,6 @@ async def update_user_progress(
         return None
 
     user.solved_tasks = solved_tasks
-    user.streak = current_streak
-    user.max_streak = max_streak
     user.last_update = dt.utcnow()
 
     await session.commit()
