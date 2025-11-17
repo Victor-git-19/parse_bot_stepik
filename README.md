@@ -1,5 +1,13 @@
 # Stepik Motivation Bot
 
+[![CI](https://github.com/Victor-git-19/parse_bot_stepik/actions/workflows/main.yml/badge.svg)](https://github.com/Victor-git-19/parse_bot_stepik/actions/workflows/main.yml)
+![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-enabled-4169E1?logo=postgresql&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/CI-GitHub_Actions-2088FF?logo=githubactions&logoColor=white)
+![Telegram Bot API](https://img.shields.io/badge/Telegram%20Bot-@-26A5E4?logo=telegram&logoColor=white)
+![OpenAI](https://img.shields.io/badge/OpenAI-powered-412991?logo=openai&logoColor=white)
+
 Телеграм‑бот, который:
 
 - принимает ссылку на профиль Stepik, сохраняет её в базе и отслеживает прогресс;
@@ -128,3 +136,6 @@ alembic upgrade head
 - Stepik REST API используется без ключей; при ошибках выбрасывается `StepikParserError`.
 - Мотивационные сообщения генерируются через кастомный `base_url` (см. `app/motivation_ai/motivation.py`); обнови при необходимости.
 - `.dockerignore` и `.gitignore` настроены так, чтобы не включать `venv`, `.env`, временные базы и IDE-файлы в образ/репозиторий.
+
+---
+Автор — [Виктор Смирнов](https://github.com/Victor-git-19)
