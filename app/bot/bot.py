@@ -5,19 +5,11 @@ from telebot.async_telebot import AsyncTeleBot
 
 from app.core.config import settings
 from app.core.db import AsyncSessionLocal
-from app.crud.user import (
-    create_user,
-    get_user_by_tg_id,
-    update_user_progress,
-)
+from app.crud.user import create_user, get_user_by_tg_id, update_user_progress
 from app.motivation_ai.motivation import generate_motivation
-from app.parser.stepik_parser import (
-    StepikParserError,
-    StepikProgress,
-    fetch_stepik_progress,
-)
+from app.parser.stepik_parser import (StepikParserError, StepikProgress,
+                                      fetch_stepik_progress)
 from app.utils.url_to_norm import normalize_stepik_url
-
 
 bot = AsyncTeleBot(settings.telegram_token)
 

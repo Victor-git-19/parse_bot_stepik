@@ -1,4 +1,5 @@
 import json
+
 import requests
 
 resp = requests.get("https://stepik.org/api/users/213662538")

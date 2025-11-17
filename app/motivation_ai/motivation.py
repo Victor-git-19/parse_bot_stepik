@@ -9,7 +9,6 @@ from openai import OpenAI
 from app.core.config import settings
 from app.parser.stepik_parser import StepikProgress
 
-
 client = OpenAI(
     api_key=settings.openai_api_key,
     base_url="https://api.aitunnel.ru/v1/",
