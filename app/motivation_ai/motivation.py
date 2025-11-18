@@ -43,8 +43,8 @@ def generate_motivation(progress: StepikProgress) -> str:
             {"role": "system", "content": "Ты доброжелательный мотиватор."},
             {"role": "user", "content": prompt},
         ],
-        max_tokens=400,
-        temperature=0.8,
+        max_tokens=1000,
+        temperature=1.5,
     )
 
     return response.choices[0].message.content.strip()
