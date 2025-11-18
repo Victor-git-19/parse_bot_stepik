@@ -25,11 +25,12 @@ def _extract_user_id(stepik_url: str) -> int:
     if not stepik_url.startswith(prefix):
         raise StepikParserError("Некорректный формат ссылки Stepik.")
 
-    remainder = stepik_url[len(prefix) :].strip("/")
+    remainder = stepik_url[len(prefix):].strip("/")
     remainder = remainder.split("?", 1)[0]
 
     if not remainder.isdigit():
-        raise StepikParserError("Не удалось определить ID пользователя Stepik.")
+        raise StepikParserError(
+            "Не удалось определить ID пользователя Stepik.")
 
     return int(remainder)
 
@@ -47,7 +48,8 @@ def _fetch_user_payload(user_id: int, *, timeout: int) -> dict[str, Any]:
     try:
         payload = response.json()
     except ValueError as exc:
-        raise StepikParserError("Stepik API вернуло неожиданный ответ.") from exc
+        raise StepikParserError(
+            "Stepik API вернуло неожиданный ответ.") from exc
 
     users = payload.get("users") or []
     if not users:
@@ -56,7 +58,8 @@ def _fetch_user_payload(user_id: int, *, timeout: int) -> dict[str, Any]:
     return users[0]
 
 
-def fetch_stepik_progress(stepik_url: str, timeout: int = 10) -> StepikProgress:
+def fetch_stepik_progress(
+        stepik_url: str, timeout: int = 10) -> StepikProgress:
     """Возвращает прогресс пользователя по ссылке профиля."""
     user_id = _extract_user_id(stepik_url)
     user_payload = _fetch_user_payload(user_id, timeout=timeout)

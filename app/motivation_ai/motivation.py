@@ -38,7 +38,7 @@ def generate_motivation(progress: StepikProgress) -> str:
     prompt = build_motivation_prompt(progress)
 
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-5-nano",
         messages=[
             {"role": "system", "content": "Ты доброжелательный мотиватор."},
             {"role": "user", "content": prompt},

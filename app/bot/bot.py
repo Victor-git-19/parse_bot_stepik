@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from typing import Optional
 
 from telebot.async_telebot import AsyncTeleBot
@@ -7,17 +8,23 @@ from app.core.config import settings
 from app.core.db import AsyncSessionLocal
 from app.crud.user import create_user, get_user_by_tg_id, update_user_progress
 from app.motivation_ai.motivation import generate_motivation
-from app.parser.stepik_parser import (StepikParserError, StepikProgress,
+from app.parser.stepik_parser import (StepikParserError,
                                       fetch_stepik_progress)
 from app.utils.url_to_norm import normalize_stepik_url
 
 bot = AsyncTeleBot(settings.telegram_token)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+)
+logger = logging.getLogger(__name__)
 
 
 @bot.message_handler(commands=["start"])
 async def start_handler(message):
     tg_user = message.from_user
     first_name = tg_user.first_name or "друг"
+    logger.info("Получена команда /start от пользователя %s", tg_user.id)
     await bot.send_message(
         message.chat.id,
         f"Привет, {first_name}! Отправь ссылку на профиль Stepik",
@@ -32,6 +39,11 @@ async def text_handler(message):
     normalized_url: Optional[str] = normalize_stepik_url(message.text or "")
 
     if not normalized_url:
+        logger.warning(
+            "Некорректная ссылка Stepik от пользователя %s: %s",
+            message.from_user.id,
+            message.text,
+        )
         await bot.send_message(
             message.chat.id,
             "Некорректный формат ссылки.",
@@ -48,8 +60,11 @@ async def text_handler(message):
                 name=name,
                 stepik_url=normalized_url,
             )
-    except Exception as exc:
-        print(f"DB error: {exc}")
+    except Exception:
+        logger.exception(
+            "Ошибка при сохранении пользователя %s",
+            message.from_user.id,
+        )
         await bot.send_message(
             message.chat.id,
             "Не удалось сохранить ссылку. Попробуй позже.",
@@ -69,6 +84,10 @@ async def progress_handler(message):
         user = await get_user_by_tg_id(session, message.from_user.id)
 
     if not user or not user.stepik_url:
+        logger.info(
+            "Пользователь %s запросил /progress без сохранённой ссылки",
+            message.from_user.id,
+        )
         await bot.send_message(
             message.chat.id,
             "Сначала отправь ссылку на профиль Stepik, чтобы я знал, "
@@ -78,8 +97,11 @@ async def progress_handler(message):
 
     try:
         progress = fetch_stepik_progress(user.stepik_url)
-    except StepikParserError as exc:
-        print(f"Parser error: {exc}")
+    except StepikParserError:
+        logger.exception(
+            "Не удалось получить прогресс Stepik для пользователя %s",
+            message.from_user.id,
+        )
         await bot.send_message(
             message.chat.id,
             "Не удалось получить прогресс со Stepik. Попробуй позже.",
@@ -106,6 +128,7 @@ async def progress_handler(message):
 
 
 async def run_bot():
+    logger.info("Бот запущен и ожидает сообщения")
     await bot.infinity_polling()
 
 if __name__ == "__main__":
