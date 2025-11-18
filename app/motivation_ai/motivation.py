@@ -38,13 +38,13 @@ def generate_motivation(progress: StepikProgress) -> str:
     prompt = build_motivation_prompt(progress)
 
     response = client.chat.completions.create(
-        model="gpt-5-nano",
+        model="gemini-2.5-flash-lite",
         messages=[
             {"role": "system", "content": "Ты доброжелательный мотиватор."},
             {"role": "user", "content": prompt},
         ],
-        max_tokens=1000,
-        temperature=1.5,
+        max_tokens=400,
+        temperature=0.8,
     )
 
     return response.choices[0].message.content.strip()
